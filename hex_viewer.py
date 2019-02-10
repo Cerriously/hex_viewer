@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import common 
 import editBox
+import common_colors
 
 BYTES = [    0,  1,  2,  3,
 			 8,  9, 10, 11,
@@ -25,8 +26,7 @@ class hexBox(QWidget):
 		self.y = y
 		
 		self.l = QLabel()
-		self.l.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-		#self.l.setText("")
+		self.l.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)		
 
 		hb = QHBoxLayout()
 		hb.addWidget(self.l)
@@ -37,7 +37,7 @@ class hexBox(QWidget):
 		if val != '0':
 			f = self.l.font()			
 			f.setBold(True)
-			self.l.setStyleSheet("color: rgb(25,25,112)")			
+			self.l.setStyleSheet("color: rgb(25,25,112)")
 		else:
 			f = self.l.font()
 			f.setBold(False)
@@ -57,10 +57,10 @@ class hexBox(QWidget):
 		# http://www.discoveryplayground.com/computer-programming-for-kids/rgb-colors/
 		# https://contrast-ratio.com
 		if self.x in BYTES:
-			color = self.palette().color(QPalette.Background)
-			outer, inner = Qt.black, QColor(240,230,140)
+			color = self.palette().color(QPalette.Background)			
+			outer, inner = Qt.black, QColor(common_colors.colors['eggshell'].hex_format())
 		else:
-			outer, inner = Qt.black, QColor(238,229,222)
+			outer, inner = Qt.black, QColor(common_colors.colors['gainsboro'].hex_format())
 
 		p.fillRect(r, QBrush(inner))
 		pen = QPen(outer)
@@ -72,6 +72,7 @@ class hexBox(QWidget):
 class MainWindow(QMainWindow):
 	def __init__(self, *args, **kwargs):
 		super(MainWindow, self).__init__(*args, **kwargs)
+		self.setWindowTitle("Hex Viewer")
 		w    = QWidget()
 		form_l = QFormLayout()
 		form_r = QFormLayout()
@@ -84,6 +85,10 @@ class MainWindow(QMainWindow):
 		self.line_hex = QLineEdit()
 		self.line_dec = QLineEdit()
 		self.line_bin = QLineEdit()
+
+		self.line_dec.setReadOnly(True)
+		self.line_bin.setReadOnly(True)
+
 		self.line_hex.setStyleSheet("background-color: cyan; color: black ")
 				
 		self.line_hex.setText("")
